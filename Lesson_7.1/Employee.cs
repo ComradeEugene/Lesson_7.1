@@ -19,7 +19,7 @@ namespace Lesson_7
             set { flag = value; }
         }
 
-        private Employee(uint id, DateTime creatData, string fullName, uint age,
+        public Employee(uint id, DateTime creatData, string fullName, uint age,
             uint height, DateTime birthbay, string birthPlace) : this()
         {
             Id = id;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using static System.Console;
 
 namespace Lesson_7
@@ -28,51 +29,95 @@ namespace Lesson_7
 
         internal Employee[] List { get => list; set => list = value; }
 
-        public Employees(int size) : this()//конструктор
+        public Employees(int size) : this()                                     
         {
             Size = size;
             Count = 0;
             list = new Employee[Size];
         }
  
-        public Employee this[int index]//индексатор
+        public Employee this[int index]                                         //индексатор
         {
             get { return List[index]; }
             set { List[index] = value; }
         }
+
+        public void LoadText(string path)                                       //загрузка из файла
+        {
+            if (File.Exists(path))
+            {
+                using (StreamReader sr = new StreamReader(path))
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        if (Count >= list.Length)
+                            Array.Resize(ref list, list.Length * 2);
+
+                        string[] arr = sr.ReadLine().Split('#');
+                        list[Count] = new Employee(uint.Parse(arr[0]),
+                            DateTime.Parse(arr[1]), arr[2], uint.Parse(arr[3]),
+                            uint.Parse(arr[4]), DateTime.Parse(arr[5]), arr[6]);
+
+                        list[Count].Flag = 1;
+                        ++Count;
+                    }
+                }
+            }
+        }
+
+        public void WriteAll()
+        {
+            string str = string.Empty;
+            File.Delete(@"TestList");
+            for (int i = 0; i < list.Length; i++)
+            {
+                str = $"{list[i].Id}#{list[i].CreatDate}#{list[i].FullName}#" +
+                    $"{list[i].Age}#{list[i].Height}#{list[i].Birthbay}#" +
+                    $"{list[i].BirthPlace}\n";
+                File.AppendAllText(@"TestList", str);
+            }
+        }
  
-        public void AddElement()// Метод добавления элемента
+        public void AddElement()                                                // Метод добавления элемента
         {
             if (Count >= list.Length)
             {
                 Array.Resize(ref list, list.Length * 2);
             }
+            string str = string.Empty; 
             List[Count] = new Employee();
             List[Count].Flag = 1;
             List[Count].CreatDate = DateTime.Today;
 
             WriteLine("ID");
-            List[Count].Id = CheckParam();
+            list[Count].Id = CheckParam();
+            str += list[Count].Id + "#" + list[Count].CreatDate + "#";
 
             WriteLine("Ф.И.О.");
-            List[Count].FullName = ReadLine();
+            list[Count].FullName = ReadLine();
+            str += list[Count].FullName + "#";
 
             WriteLine("Возраст");
-            List[Count].Age = CheckParam();
+            list[Count].Age = CheckParam();
+            str += list[Count].Age + "#";
 
             WriteLine("Рост");
-            List[Count].Height = CheckParam();
+            list[Count].Height = CheckParam();
+            str += list[Count].Height + "#";
 
             WriteLine("Дата рождения в формате дд.мм.гггг");
-            List[Count].Birthbay =CheckData(); 
+            list[Count].Birthbay = CheckData();
+            str += list[Count].Birthbay.ToString("dd.MM.yyyy") + "#";
 
             WriteLine("Место рождения");
-            List[Count].BirthPlace = ReadLine();
+            list[Count].BirthPlace = ReadLine();
+            str += list[Count].BirthPlace + "\n";
 
-            Count++;
+            File.AppendAllText(@"TestList", str);
+            ++Count;
         }
 
-        public void Print()
+        public void Print()                                                     //печать списка
         {
             for (int i = 0; i < list.Length; i++)
             {
@@ -82,8 +127,38 @@ namespace Lesson_7
                 }
             }
         }
+
+        public void FindEmployee()                                              //поиск элемента
+        {
+            WriteLine("Введите ID(положительное число)");
+            uint index = CheckParam();
+            for (int i = 0; i < list.Length; i++)
+            {
+                if (list[i].Id == index)
+                {
+                    list[i].Print();
+                    return;
+                }
+            }
+            WriteLine("Запись с таким   ID не существует");
+        }
+
+        public void DelEmployee()                                               //удаление элемента
+        {
+            WriteLine("Введите ID(положительное число) удаляемого элемента");
+            uint index = CheckParam();
+            for (int i = 0; i < list.Length; i++)
+            {
+                if (list[i].Id == index)
+                {
+                    Array.Clear(list, i, 1);
+                    return;
+                }
+            }
+            WriteLine("Запись с таким   ID не существует");
+        }
  
-        uint CheckParam()//проверка параметров
+        uint CheckParam()                                                       //проверка параметров
         {
             uint param;
             while (true)
@@ -99,7 +174,7 @@ namespace Lesson_7
             }
         }
 
-        DateTime CheckData()
+        DateTime CheckData()                                                    //проверка даты
         {
             DateTime date;
             while (true)
