@@ -65,16 +65,21 @@ namespace Lesson_7
             }
         }
 
-        public void WriteAll()
+        void ReWrite()                                                          //перезапись 
         {
             string str = string.Empty;
             File.Delete(@"TestList");
+            Count = 0;
             for (int i = 0; i < list.Length; i++)
             {
-                str = $"{list[i].Id}#{list[i].CreatDate}#{list[i].FullName}#" +
-                    $"{list[i].Age}#{list[i].Height}#{list[i].Birthbay}#" +
-                    $"{list[i].BirthPlace}\n";
-                File.AppendAllText(@"TestList", str);
+                if (list[i].Flag == 1)
+	            {
+                    str = $"{list[i].Id}#{list[i].CreatDate}#{list[i].FullName}#" +
+                        $"{list[i].Age}#{list[i].Height}#{list[i].Birthbay}#" +
+                        $"{list[i].BirthPlace}\n";
+                    File.AppendAllText(@"TestList", str);
+                    ++Count;
+	            }
             }
         }
  
@@ -152,6 +157,7 @@ namespace Lesson_7
                 if (list[i].Id == index)
                 {
                     Array.Clear(list, i, 1);
+                    ReWrite();
                     return;
                 }
             }
