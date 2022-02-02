@@ -46,13 +46,12 @@ namespace Lesson_7
 		{
 			if (File.Exists(path))
 			{
+				Count = 0;
+				list = new Employee[File.ReadAllLines(@"TestList").Length * 2];
 				using (StreamReader sr = new StreamReader(path))
 				{
 					while (!sr.EndOfStream)
 					{
-						if (Count >= list.Length)
-							Array.Resize(ref list, list.Length * 2);
-
 						string[] arr = sr.ReadLine().Split('#');
 						list[Count] = new Employee(uint.Parse(arr[0]),
 							DateTime.Parse(arr[1]), arr[2], uint.Parse(arr[3]),
@@ -68,15 +67,17 @@ namespace Lesson_7
 		void ReWrite()                                                          //перезапись 
 		{
 			string str = string.Empty;
-			File.Delete(@"TestList");
-			for (int i = 0; i < list.Length; i++)
-			{
-				if (list[i].Flag == 1)
+			using(StreamWriter sw = new StreamWriter(@"TestList"))
+			{ 
+				for (int i = 0; i < list.Length; i++)
 				{
-					str = $"{list[i].Id}#{list[i].CreatDate}#{list[i].FullName}#" +
-						$"{list[i].Age}#{list[i].Height}#{list[i].Birthbay}#" +
-						$"{list[i].BirthPlace}\n";
-					File.AppendAllText(@"TestList", str);
+					if (list[i].Flag == 1)
+					{
+						str = $"{list[i].Id}#{list[i].CreatDate}#{list[i].FullName}#" +
+							$"{list[i].Age}#{list[i].Height}#{list[i].Birthbay}#" +
+							$"{list[i].BirthPlace}";
+						sw.WriteLine(str);
+					}
 				}
 			}
 		}
@@ -200,6 +201,7 @@ namespace Lesson_7
 				{
 					Array.Clear(list, i, 1);
 					ReWrite();
+					LoadText(@"TestList");
 					return;
 				}
 			}
@@ -266,7 +268,6 @@ namespace Lesson_7
 					}
 				}
 			}
-			ReWrite();
 		}
  
 		uint CheckParam()                                                       //проверка параметров
