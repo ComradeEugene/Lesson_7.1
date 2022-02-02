@@ -232,41 +232,19 @@ namespace Lesson_7
 		{ 
 			WriteLine("1 по возрастанию\n2 по убыванию");
 			string str = ReadLine();
-			Employee temp = new Employee();
-			bool isSorted = false;
+			DateTime[] arr = new DateTime[Count];
+			for (int i = 0; i < arr.Length; i++)
+			{ 
+				arr[i] = list[i].CreatDate;
+			}
 			if (str == "1")
 			{ 
-				while (isSorted == false)
-				{ 
-					isSorted = true;
-					for (int i = 1; i < list.Length; i++)
-					{
-						if (list[i].CreatDate < list[i - 1].CreatDate) 
-						{
-							temp = list[i];
-							list[i] = list[i -1];
-							list[i - 1] = temp;
-							isSorted = false;
-						}
-					}
-				}
+				Array.Sort(arr, list);
 			}
 			else if (str == "2")
 			{
-				while (isSorted == false)
-				{ 
-					isSorted = true;
-					for (int i = 1; i < list.Length; i++)
-					{
-						if (list[i].CreatDate > list[i - 1].CreatDate) 
-						{
-							temp = list[i];
-							list[i] = list[i -1];
-							list[i - 1] = temp;
-							isSorted = false;
-						}
-					}
-				}
+				Array.Sort(arr, list);
+				Array.Reverse(list);
 			}
 		}
  
