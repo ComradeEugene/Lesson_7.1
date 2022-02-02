@@ -81,7 +81,7 @@ namespace Lesson_7
 			}
 		}
  
-		public void AddElement()                                                // Метод добавления элемента
+		public void AddElement()                                                //добавление элемента
 		{
 			Clear();
 			if (Count >= list.Length)
@@ -234,12 +234,12 @@ namespace Lesson_7
 			bool isSorted = false;
 			if (str == "1")
 			{ 
-				while (isSorted)
+				while (isSorted == false)
 				{ 
 					isSorted = true;
 					for (int i = 1; i < list.Length; i++)
 					{
-						if (list[i].Id < list[i - 1].Id) 
+						if (list[i].CreatDate < list[i - 1].CreatDate) 
 						{
 							temp = list[i];
 							list[i] = list[i -1];
@@ -251,12 +251,12 @@ namespace Lesson_7
 			}
 			else if (str == "2")
 			{
-				while (isSorted)
+				while (isSorted == false)
 				{ 
 					isSorted = true;
 					for (int i = 1; i < list.Length; i++)
 					{
-						if (list[i].Id > list[i - 1].Id) 
+						if (list[i].CreatDate > list[i - 1].CreatDate) 
 						{
 							temp = list[i];
 							list[i] = list[i -1];
@@ -266,6 +266,7 @@ namespace Lesson_7
 					}
 				}
 			}
+			ReWrite();
 		}
  
 		uint CheckParam()                                                       //проверка параметров
