@@ -8,10 +8,7 @@ namespace Lesson_7
 		public static void Main(string[] args)
 		{
 			Employees emp = new Employees(10);
-			Console.WriteLine(emp.List.Length);
 			emp.LoadText(@"TestList");;
-			Console.WriteLine(emp.List.Length);
-			ReadKey();
 			do
 			{
 				Clear();
