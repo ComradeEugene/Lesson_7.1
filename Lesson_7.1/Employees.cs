@@ -47,11 +47,14 @@ namespace Lesson_7
 			if (File.Exists(path))
 			{
 				Count = 0;
-				list = new Employee[File.ReadAllLines(@"TestList").Length * 2];
 				using (StreamReader sr = new StreamReader(path))
 				{
 					while (!sr.EndOfStream)
 					{
+						if (Count >= list.Length)								//перед тем как добавить элемент проверяю есть ли место в массиве
+                        {														
+							Array.Resize(ref list, list.Length + 10);			//если места нет увеличиваю массив на 10 элементов
+                        }
 						string[] arr = sr.ReadLine().Split('#');
 						list[Count] = new Employee(uint.Parse(arr[0]),
 							DateTime.Parse(arr[1]), arr[2], uint.Parse(arr[3]),
@@ -199,9 +202,9 @@ namespace Lesson_7
 			{
 				if (list[i].Id == index)
 				{
-					Array.Clear(list, i, 1);
-					ReWrite();
-					LoadText(@"TestList");
+					Array.Clear(list, i, 1);									//удалил нужный элемент в массиве
+					ReWrite();													//перезаписал текстовый документ
+					LoadText(@"TestList");										//перезаписываю массив используя текстовый файл
 					return;
 				}
 			}
