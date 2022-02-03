@@ -46,6 +46,7 @@ namespace Lesson_7
 		{
 			if (File.Exists(path))
 			{
+				list = new Employee[10];
 				Count = 0;
 				using (StreamReader sr = new StreamReader(path))
 				{
