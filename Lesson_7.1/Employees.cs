@@ -46,24 +46,17 @@ namespace Lesson_7
 		{
 			if (File.Exists(path))
 			{
-				list = new Employee[10];
-				Count = 0;
-				using (StreamReader sr = new StreamReader(path))
-				{
-					while (!sr.EndOfStream)
-					{
-						if (Count >= list.Length)								//перед тем как добавить элемент проверяю есть ли место в массиве
-                        {														
-							Array.Resize(ref list, list.Length + 10);			//если места нет увеличиваю массив на 10 элементов
-                        }
-						string[] arr = sr.ReadLine().Split('#');
-						list[Count] = new Employee(uint.Parse(arr[0]),
-							DateTime.Parse(arr[1]), arr[2], uint.Parse(arr[3]),
-							uint.Parse(arr[4]), DateTime.Parse(arr[5]), arr[6]);
+				string[] ReadText = File.ReadAllLines(@"TestList");
+				list = new Employee[ReadText.Length];
+				for (int i = 0; i < list.Length; i++)
+                { 
+					string[] arr = ReadText[i].Split('#');
+					list[i] = new Employee(uint.Parse(arr[0]),
+						DateTime.Parse(arr[1]), arr[2], uint.Parse(arr[3]),
+						uint.Parse(arr[4]), DateTime.Parse(arr[5]), arr[6]);
 
-						list[Count].Flag = 1;
-						++Count;
-					}
+					list[i].Flag = 1;
+					++Count;
 				}
 			}
 		}
@@ -91,7 +84,7 @@ namespace Lesson_7
 			Clear();
 			if (Count >= list.Length)
 			{
-				Array.Resize(ref list, list.Length * 2);
+				Array.Resize(ref list, list.Length + 10);
 			}
 			string str = string.Empty; 
 			List[Count] = new Employee();
@@ -199,19 +192,34 @@ namespace Lesson_7
 			Clear();
 			WriteLine("Введите ID(положительное число) удаляемого элемента");
 			uint index = CheckParam();
+			Employee[] temp = new Employee[list.Length];
+			bool elemFound = false;
+			int j = 0;
 			for (int i = 0; i < list.Length; i++)
 			{
-				if (list[i].Id == index)
+				if (list[i].Id != index)
 				{
-					Array.Clear(list, i, 1);									//удалил нужный элемент в массиве
-					ReWrite();													//перезаписал текстовый документ
-					LoadText(@"TestList");										//перезаписываю массив используя текстовый файл
-					return;
+					temp[j] = list[i];
+					++j;
+				}
+				else
+				{
+					elemFound = true;
+					--Count;
 				}
 			}
-			Clear();
-			WriteLine("Запись с таким   ID не существует");
-			ReadKey();
+			if (elemFound == true)
+            { 
+				list = new Employee[Count];
+				Array.Copy(temp, list, Count);
+				ReWrite();	
+			}
+			else
+            { 
+				Clear();
+				WriteLine("Запись с таким   ID не существует");
+				ReadKey();
+			}
 		}
 
 		public void DateRange()													//поиск по диапозону дат

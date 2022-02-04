@@ -8,7 +8,7 @@ namespace Lesson_7
 		public static void Main(string[] args)
 		{
 			Employees emp = new Employees(10);
-			emp.LoadText(@"TestList");;
+			emp.LoadText(@"TestList");
 			do
 			{
 				Clear();
